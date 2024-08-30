@@ -2,12 +2,19 @@ from flask import Flask, jsonify
 from pymongo import MongoClient, TEXT
 from bson import ObjectId
 from datetime import datetime, timedelta
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 client = MongoClient("mongodb://localhost:27017/")
 db = client["almayadeen"]
 collection = db["articles"]
+
+
+@app.route("/articles_count", methods=["GET"])
+def articles_count():
+    return jsonify(collection.count_documents(filter={}))
 
 
 @app.route("/top_keywords", methods=["GET"])
@@ -47,7 +54,7 @@ def articles_by_date():
                 "count": {"$sum": 1},
             }
         },
-        {"$sort": {"_id": -1}},
+        {"$sort": {"_id": 1}},
     ]
     result = list(collection.aggregate(pipeline))
     return jsonify(result)
@@ -57,7 +64,7 @@ def articles_by_date():
 def articles_by_word_count():
     pipeline = [
         {"$group": {"_id": {"$toInt": "$word_count"}, "count": {"$sum": 1}}},
-        {"$sort": {"_id": -1}},
+        {"$sort": {"_id": 1}},
     ]
     result = list(collection.aggregate(pipeline))
     return jsonify(result)
@@ -91,13 +98,15 @@ def recent_articles():
         {
             "$project": {
                 "_id": 0,
+                "url": 1,
                 "title": 1,
-                "published_date": {
+                "keywords": 1,
+                "published_time": {
                     "$dateFromString": {"dateString": "$published_time"}
                 },
             }
         },
-        {"$sort": {"published_time": 1}},
+        {"$sort": {"published_time": -1}},
         {"$limit": 10},
     ]
     result = list(collection.aggregate(pipeline))
@@ -118,7 +127,15 @@ def articles_by_keyword(keyword):
 def articles_by_author(author_name):
     pipeline = [
         {"$match": {"author": author_name}},
-        {"$project": {"_id": 0, "title": 1, "author": 1}},
+        {
+            "$project": {
+                "_id": 0,
+                "url": 1,
+                "title": 1,
+                "keywords": 1,
+                "published_time": 1,
+            }
+        },
     ]
     result = list(collection.aggregate(pipeline))
     return jsonify(result)
@@ -141,7 +158,15 @@ def article_details(postid):
     postid = ObjectId(postid)
     pipeline = [
         {"$match": {"_id": postid}},
-        {"$project": {"_id": 0, "url": 1, "title": 1, "keywords": 1}},
+        {
+            "$project": {
+                "_id": 0,
+                "url": 1,
+                "title": 1,
+                "keywords": 1,
+                "published_time": 1,
+            }
+        },
     ]
     result = list(collection.aggregate(pipeline))
     return jsonify(result)
@@ -151,7 +176,7 @@ def article_details(postid):
 def articles_with_video():
     pipeline = [
         {"$match": {"video_duration": {"$ne": None}}},
-        {"$addFields": {"_id": 0, "title": 1}},
+        {"$project": {"_id": 0, "title": 1}},
     ]
     result = list(collection.aggregate(pipeline))
     return jsonify(result)
@@ -174,11 +199,33 @@ def articles_by_year(year):
                 }
             }
         },
-        {"$project": {"title": 1, "_id": 0, "published_time": 1}},
+        {
+            "$group": {
+                "_id": {
+                    "$year": {"$dateFromString": {"dateString": "$published_time"}}
+                },
+                "count": {"$sum": 1},
+            }
+        },
     ]
     result = list(collection.aggregate(pipeline))
     return jsonify(result)
 
+@app.route("/articles_grouped_by_year",methods=["GET"])
+def articles_grouped_by_year():
+    pipeline = [
+        {
+            "$group": {
+                "_id": {
+                    "$year": {"$dateFromString": {"dateString": "$published_time"}}
+                },
+                "count": {"$sum": 1},
+            }
+        },
+        {"$sort": {"_id": -1}},
+    ]
+    result = list(collection.aggregate(pipeline))
+    return jsonify(result)
 
 @app.route("/longest_articles", methods=["GET"])
 def longest_articles():
@@ -200,6 +247,7 @@ def longest_articles():
 @app.route("/shortest_articles", methods=["GET"])
 def shortest_articles():
     pipeline = [
+        {"$match": {"$expr": {"$ne": [{"$toInt": "$word_count"}, 0]}}},
         {
             "$project": {
                 "_id": 0,
@@ -279,7 +327,10 @@ def popular_keywords_last_X_days(day):
                 }
             }
         },
-        {"$project": {"title": 1, "_id": 0}},
+        {"$unwind": "$keywords"},
+        {"$group": {"_id": "$keywords", "count": {"$sum": 1}}},
+        {"$sort": {"count": -1}},
+        {"$limit": 15},
     ]
     result = list(collection.aggregate(pipeline))
     return jsonify(result)
@@ -289,51 +340,51 @@ def popular_keywords_last_X_days(day):
 def articles_by_month(year, month):
     pipeline = [
         {
-            "$match": {
-                "$expr": {
-                    "$and": [
-                        {
-                            "$eq": [
-                                {
-                                    "$year": {
-                                        "$dateFromString": {
-                                            "dateString": "$published_time"
-                                        }
-                                    }
-                                },
-                                year,
-                            ]
-                        },
-                        {
-                            "$eq": [
-                                {
-                                    "$month": {
-                                        "$dateFromString": {
-                                            "dateString": "$published_time"
-                                        }
-                                    }
-                                },
-                                month,
-                            ]
-                        },
-                    ]
-                }
+            "$group": {
+                "_id": {
+                    "year": {
+                        "$year": {"$dateFromString": {"dateString": "$published_time"}}
+                    },
+                    "month": {
+                        "$month": {"$dateFromString": {"dateString": "$published_time"}}
+                    },
+                },
+                "count": {"$sum": 1},
             }
         },
+        {"$match": {"_id.year": year, "_id.month": month}},
         {
             "$project": {
                 "_id": 0,
-                "title": 1,
-                "published_time": {
-                    "$dateFromString": {"dateString": "$published_time"}
-                },
+                "year": "$_id.year",
+                "month": "$_id.month",
+                "count": 1,
             }
         },
-        {"$sort": {"published_time": 1}},
     ]
     result = list(collection.aggregate(pipeline))
     return jsonify(result)
 
+@app.route("/articles_grouped_by_month",methods=["GET"])
+def articles_grouped_by_month():
+    pipeline = [
+        {
+            "$group": {
+                "_id": {
+                    "year": {
+                        "$year": {"$dateFromString": {"dateString": "$published_time"}}
+                    },
+                    "month": {
+                        "$month": {"$dateFromString": {"dateString": "$published_time"}}
+                    },
+                },
+                "count": {"$sum": 1},
+            }
+        },
+        {"$sort": {"_id.year": 1, "_id.month": 1}},
+    ]
+    result = list(collection.aggregate(pipeline))
+    return jsonify(result)
 
 @app.route("/articles_by_word_count_range/<int:min>/<int:max>", methods=["GET"])
 def articles_by_word_count_range(min, max):
@@ -358,11 +409,7 @@ def articles_by_word_count_range(min, max):
 @app.route("/articles_with_specific_keyword_count/<int:count>", methods=["GET"])
 def articles_with_specific_keyword_count(count):
     pipeline = [
-        {"$match" : {
-            "$expr": {
-                "$eq" : [{"$size" : "$keywords"}, count]
-            }
-        }},
+        {"$match": {"$expr": {"$eq": [{"$size": "$keywords"}, count]}}},
         {"$project": {"_id": 0, "title": 1}},
     ]
     result = list(collection.aggregate(pipeline))
@@ -417,11 +464,7 @@ def articles_containing_text(text):
 @app.route("/articles_with_more_than/<int:word_count>", methods=["GET"])
 def articles_with_more_than(word_count):
     pipeline = [
-        {"$match" : {
-            "$expr" : {
-                "$gte" : [{"$toInt": "$word_count"},word_count]
-            }
-        }},
+        {"$match": {"$expr": {"$gte": [{"$toInt": "$word_count"}, word_count]}}},
         {"$project": {"_id": 0, "title": 1, "word_count": {"$toInt": "$word_count"}}},
         {"$sort": {"word_count": 1}},
     ]
@@ -465,7 +508,7 @@ def articles_last_X_hours(hour):
 def articles_by_title_length():
     pipeline = [
         {"$group": {"_id": {"$strLenCP": "$title"}, "count": {"$sum": 1}}},
-        {"$sort": {"count": 1}},
+        {"$sort": {"_id": 1}},
     ]
     result = list(collection.aggregate(pipeline))
     return jsonify(result)
