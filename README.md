@@ -6,12 +6,12 @@ ArticleScraper is a Python project designed to scrape articles from a website us
 
 ### Features
 
--Web scraping
--MongoDB integration
--Sentiment Analysis
--Entity Recognition
--Dynamic Visualizations
--Interactive Dashboard
+1-Web scraping
+2-MongoDB integration
+3-Sentiment Analysis
+4-Entity Recognition
+5-Dynamic Visualizations
+6-Interactive Dashboard
 
 ---
 
