@@ -16,7 +16,7 @@ ArticleScraper is a Python project designed to scrape articles from a website us
 ---
 
 
-#### Project Structure
+### Project Structure:
 
 ## -1 Web Scraping with Python :
 
