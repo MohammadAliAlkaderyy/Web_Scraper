@@ -13,6 +13,9 @@ ArticleScraper is a Python project designed to scrape articles from a website us
 -Dynamic Visualizations
 -Interactive Dashboard
 
+![Uploading Terminal After Scraping 10k Article.png…]()
+
+
 ---
 
 
@@ -60,6 +63,8 @@ Create a Python script to extract articles from the Al Mayadeen website, gather 
 - **Error Handling**: Manage network issues and unexpected data formats.
 - **Documentation**: Comment code for clarity.
 
+
+   
 
 ---
 
