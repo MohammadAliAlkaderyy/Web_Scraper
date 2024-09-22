@@ -1,3 +1,5 @@
+----------------------------------------------------------------------------------------------------------------------
+
 # Article Scraper - Data Science
 
 ## Overview
@@ -15,10 +17,16 @@ ArticleScraper is a Python project designed to scrape articles from a website us
 
 
 
----
+-------------------------------------------------------------------------------------------------------------
 
 
+
+
+
+-------------------------------------------------------------------------------------------------------------
 # Project Structure:
+-------------------------------------------------------------------------------------------------------------
+
 
 ## -1 Web Scraping with Python :
 
@@ -66,7 +74,9 @@ Create a Python script to extract articles from the Al Mayadeen website, gather 
 
 ![Terminal After Scraping 10k Article](https://github.com/user-attachments/assets/52036a14-feea-4f11-bbd4-202f7d60bccd)
 
----
+
+
+------------------------------------------------------------------------------------------------------------------------
 
 
 
@@ -125,9 +135,11 @@ This task aims to store the data collected in task 1 into MongoDB and build a Fl
 - Storing data in MongoDB.
 - Building a Flask API to interact with and analyze the data.
 
-#### storing data in mongodb : 
+#### Storing data in mongodb : 
 
 ![Screenshot (79)](https://github.com/user-attachments/assets/380f9184-071e-49eb-8ce9-4d38cdcf3a37)
+
+-------------------------------------------------------------------------------------------------------------------------------
 
 #### Example on Flask API to interact with and analyze the data(http://127.0.0.1:5000/articles_updated_after_publication) : 
 
@@ -136,7 +148,7 @@ This task aims to store the data collected in task 1 into MongoDB and build a Fl
 
 
 
-------
+--------------------------------------------------------------------------------------------------------------------------------
 
 
 ## 3-Data Visualization with amCharts:
@@ -150,7 +162,7 @@ Visualizations:Line charts, bar charts, pie charts, etc.
 #### Example on visualizations using amCharts (Articles By Top Keyword Count) :
 ![Screenshot (81)](https://github.com/user-attachments/assets/5c8c8637-fbf6-4893-bef0-2dc376225cb4)
 
-------------
+------------------------------------------------------------------------------------------------------
 
 
 ## 4- Advanced Data Analysis and Insights:
@@ -201,24 +213,22 @@ Apply advanced data analysis techniques, including sentiment analysis, entity re
 - **Security**: Protect the API with security measures (e.g., authentication).
 
 #### General Dashboard:
-![Screenshot (83)](https://github.com/user-attachments/assets/67ffff72-daec-465f-b70f-3aa9e906542a)
 ![Screenshot (84)](https://github.com/user-attachments/assets/01a83c5f-4a23-4f4f-bba2-50bf31245e5e)
 ![Screenshot (85)](https://github.com/user-attachments/assets/f83af745-2226-4ca8-a98e-2f59987e2139)
 
-
+-------------------------------------------------------------------------------------------------------
 
 #### Sentiment and Entity Analysis Dashboard:
-![Screenshot (86)](https://github.com/user-attachments/assets/c137a239-8c2e-4a1f-b268-ee88d5fcf12f)
 ![Screenshot (87)](https://github.com/user-attachments/assets/25c921ca-7c78-40e5-ab3f-da4db7a3ea79)
 ![Screenshot (88)](https://github.com/user-attachments/assets/70833770-a93c-4bce-9356-18c38af1223c)
 
-
+--------------------------------------------------------------------------------------------------------
 
 
 #### Charts Selection Page:
 ![Screenshot (89)](https://github.com/user-attachments/assets/b2cffcea-06b5-4fd9-a862-a5fdf2bc7850)
 
-  
+   ------------------------------------------------------------------------------------------------------
 # Technologies Used
 Python: For web scraping, data processing, and API creation.
 Flask: To build the server and APIs.
