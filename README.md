@@ -23,7 +23,7 @@ ArticleScraper is a Python project designed to scrape articles from a website us
 
 
 
--------------------------------------------------------------------------------------------------------------
+
 # Project Structure:
 -------------------------------------------------------------------------------------------------------------
 
@@ -213,8 +213,10 @@ Apply advanced data analysis techniques, including sentiment analysis, entity re
 - **Security**: Protect the API with security measures (e.g., authentication).
 
 #### General Dashboard:
+
+![Screenshot (83)](https://github.com/user-attachments/assets/3fdf2a4d-37f2-4ae0-8765-081bebedccf2)
 ![Screenshot (84)](https://github.com/user-attachments/assets/01a83c5f-4a23-4f4f-bba2-50bf31245e5e)
-![Screenshot (85)](https://github.com/user-attachments/assets/f83af745-2226-4ca8-a98e-2f59987e2139)
+
 
 -------------------------------------------------------------------------------------------------------
 
