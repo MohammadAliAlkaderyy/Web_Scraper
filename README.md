@@ -15,10 +15,13 @@ ArticleScraper is a Python project designed to scrape articles from a website us
 -Dynamic Visualizations
 -Interactive Dashboard
 
-#### Link Youtube : https://youtu.be/47fh4OGdpBk
-
 -------------------------------------------------------------------------------------------------------------
-
+#### Link Youtube : https://youtu.be/47fh4OGdpBk
+-------------------------------------------------------------------------------------------------------------
+#### Privat Github Repository: https://github.com/MohammadAliAlkaderyy/Web_Scraper
+-------------------------------------------------------------------------------------------------------------
+#### Github Account : https://github.com/MohammadAliAlkaderyy
+-------------------------------------------------------------------------------------------------------------
 
 
 
