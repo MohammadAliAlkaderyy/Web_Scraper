@@ -62,7 +62,7 @@ Create a Python script to extract articles from the Al Mayadeen website, gather 
 - **Error Handling**: Manage network issues and unexpected data formats.
 - **Documentation**: Comment code for clarity.
 - 
-#### Terminal After Scraping 10k Article:
+#### Terminal After Scraping 10k Article and saving articles as json files:
 
 ![Terminal After Scraping 10k Article](https://github.com/user-attachments/assets/52036a14-feea-4f11-bbd4-202f7d60bccd)
 
